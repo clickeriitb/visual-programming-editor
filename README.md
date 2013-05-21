@@ -1,7 +1,12 @@
+Visual Programming Editor Using Blockly
+=======================================
 
-Currently displays blockly ( not blocklyduino)
+Current app runs using PhoneGap.
 
-keyboard problem being tackled
-
-Implementation changed , now uses PhoneGap
-
+Instructions
+------------
+<pre language = "shell">
+    <code>
+        Sample
+    </code>
+</pre>
