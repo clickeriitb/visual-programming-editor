@@ -19,8 +19,11 @@
 
 package com.iitb.vpeub;
 
+import org.apache.cordova.DroidGap;
+
+import android.content.Context;
 import android.os.Bundle;
-import org.apache.cordova.*;
+import android.view.inputmethod.InputMethodManager;
 
 public class VPEUB extends DroidGap
 {
@@ -30,7 +33,12 @@ public class VPEUB extends DroidGap
         super.onCreate(savedInstanceState);
         // Set by <content src="index.html" /> in config.xml
         //super.loadUrl(Config.getStartUrl());
+        //super.loadUrl("file:///android_asset/duino/blockly/apps/blocklyduino/index.html");
         super.loadUrl("file:///android_asset/html/index.html");
+        //SoftKeyBoard.show
+
     }
+    
+
 }
 
