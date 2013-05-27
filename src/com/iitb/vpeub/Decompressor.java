@@ -13,6 +13,9 @@ import android.app.Activity;
 import android.os.StatFs;
 import android.util.Log;
 
+/*
+ * This class handled the file copying and decompression
+ */
 public class Decompressor {
 	String input,output;
 	StartActivity activity;
@@ -27,6 +30,9 @@ public class Decompressor {
 	String sep;
 	int noOfFiles;
 
+	/*
+	 * Set up File variables wrt /data/data/....blah blah
+	 */
 	public Decompressor(StartActivity act) {
 
 		//input = inp;
@@ -46,6 +52,9 @@ public class Decompressor {
 
 	}
 
+	/*
+	 * Wrapping all methods into one
+	 */
 	public void doYourJob() {
 		copyFiles();
 		try {
@@ -58,7 +67,19 @@ public class Decompressor {
 			e.printStackTrace();
 		}
 	}
+	
+	/*
+	 * Copy Files from raw folder to phone, to be executed
+	 * 
+	 * local.tar.lzma is the compressed file containing the compressed
+	 * files for compiler
+	 * 
+	 * Busybox provides linux utilities
+	 * See : http://www.busybox.net/
+	 */
 	public void copyFiles() {
+		
+		//Check for and copy compressed file
 		File f = new File(fileDir,compFileName);
 		Log.d(TAG,"Starting to Copy");
 		if(! f.exists()) {
@@ -69,6 +90,8 @@ public class Decompressor {
 		else {
 			Log.d(TAG,"Compressed File present, not Copying");
 		}
+		
+		//Cause other threads cant update UI
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -78,7 +101,7 @@ public class Decompressor {
 			}
 		});
 
-
+		//Check for and copy busybox file
 		f = new File(fileDir,busyboxFileName);
 		if(! f.exists()) {
 
@@ -100,6 +123,11 @@ public class Decompressor {
 
 
 	}
+	
+	/*
+	 * Invoke Busybox to decompress
+	 * LZMA seems to provide best compression
+	 */
 	public void unzip() throws FileNotFoundException,IOException {
 		int size;
 		Log.d(TAG,"Unzip started");
@@ -107,9 +135,12 @@ public class Decompressor {
 		String fileDir = activity.getFilesDir().getAbsolutePath();
 		if( ! outFile.exists() ) {
 			Log.d(TAG,"Starting");
-			//Process p = Runtime.getRuntime().exec("file:///android_asset/avr_gcc");
+			
+			// See tar documentation
 			String command = fileDir + sep + busyboxFileName + " tar -C " + fileDir + " -xvf " + fileDir + sep + compFileName;
 			Log.d(TAG,"Command = " + command);
+			
+			//Create new process to invoke "busybox tar"
 			Process process = Runtime.getRuntime().exec(command);
 			
 			InputStream is = process.getInputStream();
@@ -119,6 +150,9 @@ public class Decompressor {
 			int i=0;
 			File file;
 			int bytes = 0;
+			
+			//tar spews out file names, compute total uncompressed size from them
+			// to update the progress bar
 			while((line=br.readLine())!=null)
 			{	
 				
@@ -126,7 +160,6 @@ public class Decompressor {
 				bytes += file.length();
 				final int b = bytes;
 				Log.d(TAG,"path = " + file.getAbsolutePath());
-				//able to read line only when database name like abc,datastore etc...
 				Log.d(TAG,"Progress = "+ bytes);
 				activity.runOnUiThread(new Runnable() {
 
@@ -137,7 +170,6 @@ public class Decompressor {
 					}
 				});
 				i++;
-				//Log.d(TAG,line);
 			}
 
 			Log.d(TAG,"Completed extracting");
@@ -156,6 +188,10 @@ public class Decompressor {
 		});
 
 	}
+	
+	/*
+	 * Copy files by their id in raw folder to the files directory
+	 */
 	public void copyFileByID(int id,String fn){
 		InputStream ins  = activity.getResources().openRawResource(id);
 

@@ -10,7 +10,14 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
+/*
+ * This activity handles The setting up of the compiler Environment
+ * It also displays a welcome message
+ * TODO Add help button
+ */
 public class StartActivity extends Activity implements OnClickListener  {
+
 
 	String TAG = "StartActivity";
 	TextView statusView;
@@ -36,6 +43,9 @@ public class StartActivity extends Activity implements OnClickListener  {
 		
 		nextButton.setOnClickListener(this);
 		
+		/*
+		 * Create a decompressor object in a new thread so that UI does not block
+		 */
 		final Decompressor d = new Decompressor(this);
 		new Thread((new Runnable() {
 			
@@ -47,16 +57,7 @@ public class StartActivity extends Activity implements OnClickListener  {
 		})).start();
 		
 		
-		
-		/*try {
-			d.unzip();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
 	}
 
 	@Override
@@ -66,10 +67,16 @@ public class StartActivity extends Activity implements OnClickListener  {
 		return true;
 	}
 	
+	/*
+	 * Compressed files are copied, now copy busybox file
+	 */
 	public void filesCopied() {
 		statusView.setText(R.string.copy_busybox);
 	}
 	
+	/*
+	 * Busybox is copied, now display progressbar for decompression
+	 */
 	public void busyboxCopied() {
 		
 		statusView.setText(R.string.unzip);
@@ -78,16 +85,28 @@ public class StartActivity extends Activity implements OnClickListener  {
 		
 	}
 	
+	/*
+	 * Everything is set up
+	 */
 	public void envReady() {
 		progressBar.setVisibility(View.INVISIBLE);
 		nextButton.setVisibility(View.VISIBLE);
 		msgView.setText(R.string.env_ready);
 		statusView.setText(R.string.have_fun);
 	}
+	
+	/*
+	 * Set progress bar
+	 */
 	public void setProg(int p) {
 		progressBar.setProgress(p);
 	}
 
+	/*
+	 * Start Blockly Activity
+	 * (non-Javadoc)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
 	@Override
 	public void onClick(View view) {
 		if(view == nextButton) {
