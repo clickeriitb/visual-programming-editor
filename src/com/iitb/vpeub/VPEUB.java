@@ -22,6 +22,8 @@ package com.iitb.vpeub;
 import org.apache.cordova.DroidGap;
 
 import android.content.Context;
+import android.content.res.Configuration;
+import android.inputmethodservice.KeyboardView.OnKeyboardActionListener;
 import android.os.Bundle;
 import android.view.inputmethod.InputMethodManager;
 
@@ -33,11 +35,23 @@ public class VPEUB extends DroidGap
         super.onCreate(savedInstanceState);
         // Set by <content src="index.html" /> in config.xml
         //super.loadUrl(Config.getStartUrl());
-        //super.loadUrl("file:///android_asset/duino/blockly/apps/blocklyduino/index.html");
+        //super. loadUrl("file:/ //android_asset/duino/blockly/apps/blocklyduino/index.html");
         super.loadUrl("file:///android_asset/html/index.html");
         //SoftKeyBoard.show
+        //Runtime.getRuntime().exec(prog)
+
 
     }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+    	// TODO Auto-generated method stub
+    	//super.onConfigurationChanged(newConfig);
+    }
+    
+    private void onMeasure() {
+		// TODO Auto-generated method stub
+
+	}
     
 
 }
