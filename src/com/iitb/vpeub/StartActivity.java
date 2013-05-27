@@ -3,12 +3,16 @@ package com.iitb.vpeub;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.iitb.vpeconfig.Config;
+import com.iitb.vpeconfig.Target;
 
 
 /*
@@ -18,7 +22,7 @@ import android.widget.TextView;
  */
 public class StartActivity extends Activity implements OnClickListener  {
 
-
+	
 	String TAG = "StartActivity";
 	TextView statusView;
 	TextView msgView;
@@ -31,7 +35,8 @@ public class StartActivity extends Activity implements OnClickListener  {
 	boolean init = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-
+		Target x = Config.uno;
+		Log.d(TAG,"speed = " + x.getSpeed() ); 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
 		
@@ -57,6 +62,8 @@ public class StartActivity extends Activity implements OnClickListener  {
 		})).start();
 		
 		
+
+
 
 	}
 
