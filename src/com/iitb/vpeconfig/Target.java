@@ -20,6 +20,8 @@ public class Target {
 	protected long f_cpu;
 	protected String core;
 	protected String variant;
+	protected String VID;
+	protected String PID;
 	
 	
 	public String getName() {
@@ -74,18 +76,39 @@ public class Target {
 		return f_cpu;
 	}
 	
-	public String fetCore() {
+	public String getCore() {
 		return core;
 	}
 	
 	public String getVariant() {
 		return variant;
 	}
+	public String getVID() {
+		return VID;
+	}
+	public String getPID() {
+		return PID;
+	}
 }
 
 class Uno extends Target {
 	Uno (){
-		speed = 100;
+		name="Arduino Uno";
+		protocol="arduino";
+		maximum_size=32256;
+		speed=115200;
+		low_fuses=0xff;
+		high_fuses=0xde;
+		extended_fuses=0x05;
+		path="optiboot";
+		file="optiboot_atmega328.hex";
+		unlock_bits=0x3F;
+		lock_bits=0x0F;
+		mcu="atmega328p";
+		f_cpu=16000000L;
+		core="arduino";
+		variant="standard";
+		
 	}
 
 	

@@ -9,14 +9,25 @@
     <string name="busybox_file">busybox</string>
     <string name="tar_file">local.tar</string>
     <string name="folder_file">local</string>
-    <item type="integer" name="no_of_files">1724</item>
-    <item type="integer" name="folder_size">518363711</item>
+    <string name="build_folder">build</string>
+    <string name="code_file_name">sketch.ino</string>
+    <string name="lib_folder">libraries</string>
+    <string name="code_folder">code</string>
+    <string name="avr_path">local/bin</string>
+    <string name="core_folder">cores</string>
+    <string name="variant_folder">variants</string>
+
+    <item name="no_of_files" type="integer">1724</item>
+    <item name="folder_size" type="integer">518363711</item>
+
     <string name="start_text_notready">Welcome to VPEUB\nInitializing Environment \n( This needs to be done only once )</string>
     <string name="env_ready">The Programming Environment is Set up and Ready to use</string>
     <string name="have_fun">Have Fun !</string>
     <string name="start_button_text">Start Visual Programming</string>
-	<string name="copy_compressed">Copying Compressed Files</string>
-	<string name="copy_busybox">Copying BusyBox</string>
-	<string name="unzip">Decompressing Files</string>
-	
+    <string name="copy_compressed">Copying Compressed Files</string>
+    <string name="copy_busybox">Copying BusyBox</string>
+    <string name="unzip">Decompressing Files</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_compiler">CompilerActivity</string>
+
 </resources>

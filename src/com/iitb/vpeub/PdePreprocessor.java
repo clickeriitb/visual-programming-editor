@@ -37,10 +37,17 @@ package com.iitb.vpeub;
 
 
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import java.util.regex.*;
+import android.app.Activity;
 
 
 /**
@@ -73,16 +80,23 @@ public class PdePreprocessor {
 	String buildPath;
 	// starts as sketch name, ends as main class name
 	String name;
-
+	
+	Activity activity;
+	File buildFolder;
 
 	/**
 	 * Setup a new preprocessor.
 	 */
-	public PdePreprocessor() { 
+	public PdePreprocessor(Activity act) { 
 		int tabSize = 4;
 		char[] indentChars = new char[tabSize];
 		Arrays.fill(indentChars, ' ');
 		indent = new String(indentChars);
+		activity = act;
+		buildFolder =new File(activity.getFilesDir(),activity.getString(R.string.build_folder));
+		
+		buildPath = buildFolder.getAbsolutePath();
+		
 	}
 
 	/**
@@ -93,9 +107,8 @@ public class PdePreprocessor {
 	 * @param name the name of the sketch 
 	 * @param codeFolderPackages unused param (leftover from processing)
 	 */
-	public int writePrefix(String program, String buildPath,
+	public int writePrefix(String program,
 			String sketchName, String codeFolderPackages[]) throws FileNotFoundException {
-		this.buildPath = buildPath;
 		this.name = sketchName;
 
 		// if the program ends with no CR or LF an OutOfMemoryError will happen.
@@ -141,7 +154,7 @@ public class PdePreprocessor {
 
 	/**
 	 * preprocesses a pde file and writes out a cpp file
-	 * @return the classname of the exported Java
+	 * @return the classname of the exported cpp file
 	 */
 	//public String write(String program, String buildPath, String name,
 	//                  String extraImports[]) throws java.lang.Exception {

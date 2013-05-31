@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import android.R.bool;
 import android.app.Activity;
-import android.os.StatFs;
 import android.util.Log;
 
 /*
@@ -129,7 +127,6 @@ public class Decompressor {
 	 * LZMA seems to provide best compression
 	 */
 	public void unzip() throws FileNotFoundException,IOException {
-		int size;
 		Log.d(TAG,"Unzip started");
 		File outFile = new File(fileDir,folderName);
 		String fileDir = activity.getFilesDir().getAbsolutePath();
@@ -147,7 +144,6 @@ public class Decompressor {
 
 			BufferedReader br=new BufferedReader(new InputStreamReader(is));
 			String line =null;
-			int i=0;
 			File file;
 			int bytes = 0;
 			
@@ -169,7 +165,6 @@ public class Decompressor {
 
 					}
 				});
-				i++;
 			}
 
 			Log.d(TAG,"Completed extracting");

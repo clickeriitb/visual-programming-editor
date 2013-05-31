@@ -5,7 +5,6 @@ import org.apache.cordova.api.CordovaPlugin;
 import org.json.JSONArray;
 
 import android.content.Context;
-import android.view.KeyEvent;
 import android.view.inputmethod.InputMethodManager;
 
 public class SoftKeyBoard extends CordovaPlugin {
