@@ -16,6 +16,9 @@
     <string name="avr_path">local/bin</string>
     <string name="core_folder">cores</string>
     <string name="variant_folder">variants</string>
+   	<string name="remove_all">rm -R *</string>
+   	<string name="core_file">core.a</string>
+   	
 
     <item name="no_of_files" type="integer">1724</item>
     <item name="folder_size" type="integer">518363711</item>

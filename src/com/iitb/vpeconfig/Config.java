@@ -11,7 +11,7 @@ public class Config {
 	
 	public static final int REVISION = 105;
 	public final static Target uno = new Uno();
-	static public boolean verbose = true;
+	static public boolean verbose = false;
 
 }
 

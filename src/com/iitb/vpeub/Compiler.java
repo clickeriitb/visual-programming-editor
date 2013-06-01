@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.cordova.FileUtils;
+
 import android.app.Activity;
 import android.util.Log;
 
@@ -72,6 +74,14 @@ public class Compiler {
 		buildPath =new File(activity.getFilesDir(),activity.getString(R.string.build_folder)).getAbsolutePath();
 
 
+		// Linux specific command to remove clean build folder
+
+		try {
+			org.apache.commons.io.FileUtils.cleanDirectory(new File(buildPath));
+			Log.d(TAG,"Build folder cleaned");
+		} catch (IOException e) {
+			Log.e(TAG,"I cant clean the nuild folder");
+		}
 
 	}
 
@@ -95,7 +105,7 @@ public class Compiler {
 
 		//All files/folders in libFolder
 		String list[] = libFolder.list(null);
-		
+
 		for(String l:list) {
 			Log.d(TAG,"lib file = " +l);
 		}
@@ -117,9 +127,9 @@ public class Compiler {
 				e.printStackTrace();
 			}
 
-			
+
 		}
-		
+
 
 		Log.d(TAG,"Header Table" + importToLibraryTable.toString());
 		Log.d(TAG,"Preprocessing Ended");
@@ -143,7 +153,7 @@ public class Compiler {
 
 
 	}
-	
+
 	/***
 	 * Do everything necessary for compilation
 	 * Many steps are needed to get the final hex file,
@@ -153,26 +163,30 @@ public class Compiler {
 
 
 		Log.d(TAG,"Compilation started");
-		
+
 		//List of all the include paths for all the .h files
 		List<String> includePaths = new ArrayList<String>();
-		
+
 		//This path contains Ardhuino.h for the core, along with other files
 		includePaths.add(corePath);
 
-		
+
 		//This path contains header files containing pin mappings
 		if (variantPath != null) includePaths.add(variantPath);
 		for (File file : importedLibraries) {
 			includePaths.add(file.getPath());
 		}
-		
+
 		Log.d(TAG, "INC paths = " + importedLibraries.toString());
 
-		Log.d(TAG,"Compiling user's source files");
+
 		List<File> objectFiles = new ArrayList<File>();
-		
-		// Compile users source files, in this case it will compile only one file , 
+
+		Log.d(TAG,"Step 1. - Compiling user's source files");
+		/*
+		 * ************************** STEP 1 ************************************
+		 */
+		// 1. Compile users source files, in this case it will compile only one file , 
 		// the file generated through Blockly
 		objectFiles.addAll(
 				compileFiles(avrBasePath, buildPath, includePaths,
@@ -182,10 +196,70 @@ public class Compiler {
 						target));
 		//sketchIsCompiled = true;
 
+		Log.d(TAG,"Step 2. - Compiling included libraries");
+		/*
+		 * ************************* STEP 2 ************************************
+		 */
+		// 2. compile the libraries, outputting .o files to: <buildPath>/<library>/
+
+		for (File libraryFolder : importedLibraries) {
+			File outputFolder = new File(buildPath, libraryFolder.getName());
+			File utilityFolder = new File(libraryFolder, "utility");
+			createFolder(outputFolder);
+			// this library can use includes in its utility/ folder
+			includePaths.add(utilityFolder.getAbsolutePath());
+			objectFiles.addAll(
+					compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
+							findFilesInFolder(libraryFolder, "S", false),
+							findFilesInFolder(libraryFolder, "c", false),
+							findFilesInFolder(libraryFolder, "cpp", false),
+							target));
+			outputFolder = new File(outputFolder, "utility");
+			createFolder(outputFolder);
+			objectFiles.addAll(
+					compileFiles(avrBasePath, outputFolder.getAbsolutePath(), includePaths,
+							findFilesInFolder(utilityFolder, "S", false),
+							findFilesInFolder(utilityFolder, "c", false),
+							findFilesInFolder(utilityFolder, "cpp", false),
+							target));
+			// other libraries should not see this library's utility/ folder
+			includePaths.remove(includePaths.size() - 1);
+		}
+
+		Log.d(TAG,"Step 3 -  Compiling cores files");
+		/*
+		 * ************************* STEP 3 ************************************
+		 */
+		// 3. Compile files for the core, and combine them all in core.a
+
+		includePaths.clear();
+		includePaths.add(corePath);  // include path for core only
+		if (variantPath != null) includePaths.add(variantPath);
+		List<File> coreObjectFiles =
+				compileFiles(avrBasePath, buildPath, includePaths,
+						findFilesInPath(corePath, "S", true),
+						findFilesInPath(corePath, "c", true),
+						findFilesInPath(corePath, "cpp", true),
+						target);
+
+		String runtimeLibraryName = buildPath + File.separator + activity.getString(R.string.core_file);
+		List<String> baseCommandAR = new ArrayList<String>(Arrays.asList(new String[] {
+				avrBasePath +File.separator + "avr-ar",
+				"rcs",
+				runtimeLibraryName
+		}));
+		
+		Log.d(TAG,"Archiving core files");
+		
+		for(File file : coreObjectFiles) {
+			List<String> commandAR = new ArrayList<String>(baseCommandAR);
+			commandAR.add(file.getAbsolutePath());
+			execute(commandAR);
+		}
 		Log.d(TAG,"Compilation ended");
 	}
-	
-	
+
+
 	/**
 	 * Read a file and output as a string
 	 * @param f - the File
@@ -287,9 +361,9 @@ public class Compiler {
 			{
 
 		List<File> objectPaths = new ArrayList<File>();
-		
-		
-		
+
+
+
 		for (File file : sSources) {
 			String objectPath = buildPath + File.separator + file.getName() + ".o";
 			objectPaths.add(new File(objectPath));
@@ -316,7 +390,7 @@ public class Compiler {
 			Log.d(TAG,comm.toString());
 			execute(comm);
 		}
-		 
+
 		for (File file : cppSources) {
 			String objectPath = buildPath + File.separator + file.getName() + ".o";
 			File objectFile = new File(objectPath);
@@ -377,11 +451,10 @@ public class Compiler {
 	 * @param t - the target object
 	 * @return
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	static private List<String> getCommandCompilerC(String avrBasePath, List includePaths,
+	static private List<String> getCommandCompilerC(String avrBasePath, List<String> includePaths,
 			String sourceName, String objectName, Target t) {
 
-		List baseCommandCompiler = new ArrayList(Arrays.asList(new String[] {
+		List<String> baseCommandCompiler = new ArrayList<String>(Arrays.asList(new String[] {
 				avrBasePath +File.separator+ "avr-gcc",
 				"-c", // compile, don't link
 				"-g", // include debugging info (so errors include line numbers)
@@ -409,7 +482,7 @@ public class Compiler {
 	}
 
 
-	
+
 	/**
 	 * Take the parameters and generate a command to invoke gcc , g++ etc.
 	 * Generates command for compiling CPP files
@@ -469,7 +542,7 @@ public class Compiler {
 			String line = br.readLine();
 			while(line!=null)
 			{
-				Log.d(TAG,"Process says - "+line);
+				Log.i(TAG,"Process says - "+line);
 				line = br.readLine();
 			}
 		} catch (IOException e) {
@@ -478,8 +551,13 @@ public class Compiler {
 			Log.d(TAG,"Failure to exec");
 		}
 
-		
 
+
+	}
+	private void createFolder(File folder)  {
+		if (folder.isDirectory()) return;
+		if (!folder.mkdir())
+			Log.e(TAG,"I can't create the folder: " + folder.getAbsolutePath() );
 	}
 }
 
