@@ -12,13 +12,17 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.cordova.FileUtils;
 
 import android.app.Activity;
 import android.util.Log;
 
 import com.iitb.vpeconfig.Config;
 import com.iitb.vpeconfig.Target;
+
+/**
+ * Class that takes care of compiling pure c/cpp code to a hex,
+ * to be uploaded to the board
+ */
 public class Compiler {
 
 	//Directory where code is placed (ino)
@@ -248,14 +252,97 @@ public class Compiler {
 				"rcs",
 				runtimeLibraryName
 		}));
-		
+
 		Log.d(TAG,"Archiving core files");
-		
+
+		Log.d(TAG,"Core files = " + coreObjectFiles.size());
 		for(File file : coreObjectFiles) {
 			List<String> commandAR = new ArrayList<String>(baseCommandAR);
 			commandAR.add(file.getAbsolutePath());
 			execute(commandAR);
+		} 
+
+		Log.d(TAG,"Generating ELF");
+		/*
+		 * ********************** STEP 4 *****************************
+		 */
+		// 4. link it all together into the .elf file
+		// For atmega2560, need --relax linker option to link larger
+		// programs correctly.
+		String optRelax = "";
+		String atmega2560 = new String ("atmega2560");
+		if ( atmega2560.equals(target.getMCU()) ) {
+			optRelax = new String(",--relax");
 		}
+
+		String elfName = activity.getString(R.string.elf_name);
+
+		List<String> baseCommandLinker = new ArrayList<String>(Arrays.asList(new String[] {
+				avrBasePath + File.separator + "avr-gcc",
+				"-Os",
+				"-Wl,--gc-sections"+optRelax,
+				"-mmcu=" + target.getMCU(),
+				//"-save-temps=obj",
+				"-o",
+				buildPath + File.separator + elfName + ".elf",
+
+
+		}));
+
+		for (File file : objectFiles) {
+			baseCommandLinker.add(file.getAbsolutePath());
+		}
+
+		baseCommandLinker.add(runtimeLibraryName);
+		baseCommandLinker.add("-L" + buildPath);
+		baseCommandLinker.add("-lm");
+		//Log.wtf(TAG, "linker = " + baseCommandLinker.toString());
+		//baseCommandLinker.add("-save-temps=obj");
+
+		execute(baseCommandLinker);
+
+
+		Log.d(TAG,"Doing EEPROM stuff");
+		/*
+		 * ********************** STEP 5 *****************************
+		 */
+		// 5. I am not sure
+		
+	    List<String> baseCommandObjcopy = new ArrayList<String>(Arrays.asList(new String[] {
+	    	      avrBasePath +File.separator+ "avr-objcopy",
+	    	      "-O",
+	    	      "-R",
+	    	    }));
+		
+		List<String> commandObjcopy;
+
+		commandObjcopy = new ArrayList<String>(baseCommandObjcopy);
+		commandObjcopy.add(2, "ihex");
+		commandObjcopy.set(3, "-j");
+		commandObjcopy.add(".eeprom");
+		commandObjcopy.add("--set-section-flags=.eeprom=alloc,load");
+		commandObjcopy.add("--no-change-warnings");
+		commandObjcopy.add("--change-section-lma");
+		commandObjcopy.add(".eeprom=0");
+		commandObjcopy.add(buildPath + File.separator + elfName + ".elf");
+		commandObjcopy.add(buildPath + File.separator + elfName + ".eep");
+		execute(commandObjcopy);
+		
+
+		Log.d(TAG,"Generating hex");
+		/*
+		 * ********************** STEP 5 *****************************
+		 */
+		// 6. Generating hex
+	    commandObjcopy = new ArrayList<String>(baseCommandObjcopy);
+	    commandObjcopy.add(2, "ihex");
+	    commandObjcopy.add(".eeprom"); // remove eeprom data
+	    commandObjcopy.add(buildPath + File.separator + elfName + ".elf");
+	    commandObjcopy.add(buildPath + File.separator + elfName + ".hex");
+	    //Log.wtf(TAG, commandObjcopy.toString());
+	    execute(commandObjcopy);
+		
+		
 		Log.d(TAG,"Compilation ended");
 	}
 
@@ -429,6 +516,7 @@ public class Compiler {
 				"-DARDUINO=" + Config.REVISION,
 				"-DUSB_VID=" + t.getVID(),
 				"-DUSB_PID=" + t.getPID(),
+				"-save-temps=obj",//To create temporary files in same dir as o/p files
 		}));
 
 		for (int i = 0; i < includePaths.size(); i++) {
@@ -463,11 +551,12 @@ public class Compiler {
 						"-ffunction-sections", // place each function in its own section
 						"-fdata-sections",
 						"-mmcu=" + t.getMCU(),
-						"-DF_CPU=true ? " + t.getFCPU(),
+						"-DF_CPU=" + t.getFCPU(),
 						"-MMD", // output dependancy info
 						"-DUSB_VID=" + t.getVID(),
 						"-DUSB_PID=" + t.getPID(),
 						"-DARDUINO=" + Config.REVISION, 
+						"-save-temps=obj",//To create temporary files in same dir as o/p files
 		}));
 
 		for (int i = 0; i < includePaths.size(); i++) {
@@ -512,7 +601,7 @@ public class Compiler {
 						"-DUSB_VID=" + t.getVID(),
 						"-DUSB_PID=" + t.getPID(),      
 						"-DARDUINO=" + Config.REVISION,
-						"-save-temps=obj",
+						"-save-temps=obj",//To create temporary files in same dir as o/p files
 		}));
 
 		for (int i = 0; i < includePaths.size(); i++) {
@@ -536,13 +625,17 @@ public class Compiler {
 		commandList.toArray(command);
 		Process process = null;
 		try {
-			process = Runtime.getRuntime().exec(command);
+			ProcessBuilder pb = new ProcessBuilder(commandList);
+			pb.directory(new File(buildPath));
+			process = pb.start();//Runtime.getRuntime().exec(command);
 			InputStream is = process.getErrorStream();
 			BufferedReader br=new BufferedReader(new InputStreamReader(is));
 			String line = br.readLine();
 			while(line!=null)
 			{
-				Log.i(TAG,"Process says - "+line);
+				String comm = (String)commandList.get(0);
+				String pname = comm.substring(comm.lastIndexOf(File.separator));
+				Log.e(TAG,pname + " - "+line);
 				line = br.readLine();
 			}
 		} catch (IOException e) {

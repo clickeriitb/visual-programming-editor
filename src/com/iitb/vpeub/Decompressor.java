@@ -82,7 +82,7 @@ public class Decompressor {
 		Log.d(TAG,"Starting to Copy");
 		if(! f.exists()) {
 
-			copyFileByID(R.raw.local,compFileName );
+			copyFileByID(R.raw.archive,compFileName );
 			Log.d(TAG,"Compressed File copied");
 		}
 		else {
