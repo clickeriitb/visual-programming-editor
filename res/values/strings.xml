@@ -33,5 +33,15 @@
     <string name="unzip">Decompressing Files</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_compiler">CompilerActivity</string>
+    <string name="compile_status">Pre Processing in progress</string>
+    <string name="preprocess_complete">Pre Processing Complete</string>
+    <string name="compile_step1">Compiling Source Files</string>
+    <string name="compile_step2">Compiling Including Libraries</string>
+    <string name="compile_step3">Compiling Core\'s Files</string>
+    <string name="compile_step4">Linking Object Files</string>
+    <string name="compile_step5">Extracting EEPROM Data</string>
+    <string name="compile_step6">Generating Hex File</string>
+    <string name="compile_step7">Compilation Complete   :)  :)</string>
+    <string name="compile_step4_2">Archieving Core Files</string>
 
 </resources>

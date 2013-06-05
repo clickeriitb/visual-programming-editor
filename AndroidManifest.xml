@@ -78,6 +78,7 @@
         </activity>
         <activity
             android:name="com.iitb.vpeub.CompilerActivity"
+            android:configChanges="orientation|screenSize|screenLayout"
             android:label="@string/title_activity_compiler" >
         </activity>
     </application>

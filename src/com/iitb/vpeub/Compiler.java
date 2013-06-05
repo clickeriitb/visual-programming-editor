@@ -48,7 +48,7 @@ public class Compiler {
 
 	String avrBasePath;
 	PdePreprocessor preprocessor;
-	Activity activity;
+	CompilerActivity activity;
 
 	// Absolute path of included header files
 	ArrayList<File> importedLibraries;
@@ -66,7 +66,7 @@ public class Compiler {
 	String TAG = "Compiler Class";
 
 
-	public Compiler(Activity act) {
+	public Compiler(CompilerActivity act) {
 		activity = act;
 		fileName = activity.getString(R.string.code_file_name);
 		codeDir = new File(activity.getFilesDir(),activity.getString(R.string.code_folder));
@@ -187,6 +187,18 @@ public class Compiler {
 		List<File> objectFiles = new ArrayList<File>();
 
 		Log.d(TAG,"Step 1. - Compiling user's source files");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				Log.d(TAG, "Step 1 complete");
+				activity.changeProgress(20);
+				activity.setMessage(R.string.compile_step1);
+
+			}
+		});
+
 		/*
 		 * ************************** STEP 1 ************************************
 		 */
@@ -201,6 +213,19 @@ public class Compiler {
 		//sketchIsCompiled = true;
 
 		Log.d(TAG,"Step 2. - Compiling included libraries");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(30);
+				activity.setMessage(R.string.compile_step2);
+
+			}
+		});
+
+
+
 		/*
 		 * ************************* STEP 2 ************************************
 		 */
@@ -231,6 +256,18 @@ public class Compiler {
 		}
 
 		Log.d(TAG,"Step 3 -  Compiling cores files");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(40);
+				activity.setMessage(R.string.compile_step3);
+
+			}
+		});
+
+
 		/*
 		 * ************************* STEP 3 ************************************
 		 */
@@ -253,7 +290,21 @@ public class Compiler {
 				runtimeLibraryName
 		}));
 
+
+
 		Log.d(TAG,"Archiving core files");
+
+
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(45);
+				activity.setMessage(R.string.compile_step4_2);
+
+			}
+		});
 
 		Log.d(TAG,"Core files = " + coreObjectFiles.size());
 		for(File file : coreObjectFiles) {
@@ -263,6 +314,18 @@ public class Compiler {
 		} 
 
 		Log.d(TAG,"Generating ELF");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(50);
+				activity.setMessage(R.string.compile_step4);
+
+			}
+		});
+
+
 		/*
 		 * ********************** STEP 4 *****************************
 		 */
@@ -303,17 +366,30 @@ public class Compiler {
 
 
 		Log.d(TAG,"Doing EEPROM stuff");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(60);
+				activity.setMessage(R.string.compile_step5);
+
+			}
+		});
+
+
+
 		/*
 		 * ********************** STEP 5 *****************************
 		 */
 		// 5. I am not sure
-		
-	    List<String> baseCommandObjcopy = new ArrayList<String>(Arrays.asList(new String[] {
-	    	      avrBasePath +File.separator+ "avr-objcopy",
-	    	      "-O",
-	    	      "-R",
-	    	    }));
-		
+
+		List<String> baseCommandObjcopy = new ArrayList<String>(Arrays.asList(new String[] {
+				avrBasePath +File.separator+ "avr-objcopy",
+				"-O",
+				"-R",
+		}));
+
 		List<String> commandObjcopy;
 
 		commandObjcopy = new ArrayList<String>(baseCommandObjcopy);
@@ -327,23 +403,47 @@ public class Compiler {
 		commandObjcopy.add(buildPath + File.separator + elfName + ".elf");
 		commandObjcopy.add(buildPath + File.separator + elfName + ".eep");
 		execute(commandObjcopy);
-		
+
 
 		Log.d(TAG,"Generating hex");
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(80);
+				activity.setMessage(R.string.compile_step6);
+
+			}
+		});
+
 		/*
-		 * ********************** STEP 5 *****************************
+		 * ********************** STEP 6 *****************************
 		 */
 		// 6. Generating hex
-	    commandObjcopy = new ArrayList<String>(baseCommandObjcopy);
-	    commandObjcopy.add(2, "ihex");
-	    commandObjcopy.add(".eeprom"); // remove eeprom data
-	    commandObjcopy.add(buildPath + File.separator + elfName + ".elf");
-	    commandObjcopy.add(buildPath + File.separator + elfName + ".hex");
-	    //Log.wtf(TAG, commandObjcopy.toString());
-	    execute(commandObjcopy);
-		
-		
+		commandObjcopy = new ArrayList<String>(baseCommandObjcopy);
+		commandObjcopy.add(2, "ihex");
+		commandObjcopy.add(".eeprom"); // remove eeprom data
+		commandObjcopy.add(buildPath + File.separator + elfName + ".elf");
+		commandObjcopy.add(buildPath + File.separator + elfName + ".hex");
+		//Log.wtf(TAG, commandObjcopy.toString());
+		execute(commandObjcopy);
+
+
 		Log.d(TAG,"Compilation ended");
+
+
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				activity.changeProgress(100);
+				activity.setMessage(R.string.compile_step7);
+				activity.removeCirularBar();
+			}
+		});
+
 	}
 
 
@@ -639,7 +739,6 @@ public class Compiler {
 				line = br.readLine();
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Log.d(TAG,"Failure to exec");
 		}
