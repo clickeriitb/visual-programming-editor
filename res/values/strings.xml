@@ -16,10 +16,9 @@
     <string name="avr_path">local/bin</string>
     <string name="core_folder">cores</string>
     <string name="variant_folder">variants</string>
-   	<string name="remove_all">rm -R *</string>
-   	<string name="core_file">core.a</string>
-   	<string name="elf_name">final</string>
-   	
+    <string name="remove_all">rm -R *</string>
+    <string name="core_file">core.a</string>
+    <string name="elf_name">final</string>
 
     <item name="no_of_files" type="integer">1724</item>
     <item name="folder_size" type="integer">518363711</item>
@@ -43,5 +42,6 @@
     <string name="compile_step6">Generating Hex File</string>
     <string name="compile_step7">Compilation Complete   :)  :)</string>
     <string name="compile_step4_2">Archieving Core Files</string>
+    <string name="title_activity_editor">EditorActivity</string>
 
 </resources>

@@ -1,0 +1,6 @@
+1. Added closure library
+2. Removed the scrollbar shifting problem in core(block.js) : Line no-325 
+3. Removed the background dragging problem in core(blockly.js): Line no-236 to 260
+4. created a button to copy the content of textarea_arduino to a file named sketch.ino in /data/data/com.iitb.vpehtml/files/code folder. : line 14-42 and 319-320.
+5. Added function call me() for the hiding and unhiding of the toolbox. The button is given the name "Hide/Unhide_Blocks" in apps folder(index.html): Line no:15-19 and 320 to 321.
+6. Added function Copy_Arduino() for copying the arduino code that is generated. Also,a button 'CopyArduinoCode' is added to provide access to the copied Arduino code in apps folder(index.html):Line no:23-27 and 324.

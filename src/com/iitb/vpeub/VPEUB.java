@@ -21,34 +21,47 @@ package com.iitb.vpeub;
 
 import org.apache.cordova.DroidGap;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
 
 public class VPEUB extends DroidGap
 {
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        // Set by <content src="index.html" /> in config.xml
-        //super.loadUrl(Config.getStartUrl());
-        //super. loadUrl("file:/ //android_asset/duino/blockly/apps/blocklyduino/index.html");
-        //super.loadUrl("file:///android_asset/html/index.html");
-        super.loadUrl("http://172.16.201.106");
-        //super.load
-        //SoftKeyBoard.show
-        //Runtime.getRuntime().exec(prog)
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		super.setIntegerProperty("loadUrlTimeoutValue", 60000);
 
 
-    }
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-    	// TODO Auto-generated method stub
-    	//super.onConfigurationChanged(newConfig);
-    }
-    
+		super.init(); 
+		// Calling this is necessary to call java code (native code) from JavaScript
+		appView.addJavascriptInterface(this, "MainActivity");
 
-    
+		// "this" points the to the object of the current activity. 
+		//"MainActivity" is used to refer "this" object in JavaScript
+
+		super. loadUrl("file:///android_asset/www/blockly/apps/blocklyduino/main.html");
+
+	}
+	
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		//super.onConfigurationChanged(newConfig);
+	}
+	
+
+	/*
+	 * Function to start the Editor Activity
+	 */
+	public void customFunctionCalled() {
+		Log.e("Custom Function Called", "Custom Function Called");
+
+		Intent intent = new Intent(this,EditorActivity.class);	
+		startActivity(intent); 
+	}
 
 }
 

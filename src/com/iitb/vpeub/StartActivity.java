@@ -117,7 +117,7 @@ public class StartActivity extends Activity implements OnClickListener  {
 	@Override
 	public void onClick(View view) {
 		if(view == nextButton) {
-			Intent intent = new Intent(this, CompilerActivity.class);
+			Intent intent = new Intent(this, VPEUB.class);
 			startActivity(intent);
 
 		}
