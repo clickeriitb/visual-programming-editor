@@ -5,7 +5,7 @@ Current app runs using PhoneGap.Keyboard issue still persists. PhoneGap provides
 
 Instructions
 ------------
-1. Ecexute in shell.
+1. Execute in shell.
 ```
 git clone https://github.com/clickeriitb/visual-programming-editor.git
 ```
@@ -16,7 +16,7 @@ git clone https://github.com/clickeriitb/visual-programming-editor.git
 
 ```
 git fetch upstream
-git merge upstream/master
+git merge upstream/origin
 ```
 and then choose **Run**
 
