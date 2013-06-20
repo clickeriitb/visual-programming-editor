@@ -18,6 +18,6 @@ git clone https://github.com/clickeriitb/visual-programming-editor.git
 git fetch upstream
 git merge upstream/origin
 ```
-and then choose **Run**
+and then choose **Run**.
 
  
