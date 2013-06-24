@@ -189,7 +189,7 @@ Blockly.ContextMenu.optionToDom = function(text) {
   var textElement = Blockly.createSvgElement('text',
       {'class': 'blocklyMenuText',
       'x': Blockly.ContextMenu.X_PADDING,
-      'y': 15}, gElement);
+      'y': 18}, gElement);
   var textNode = document.createTextNode(text);
   textElement.appendChild(textNode);
   return gElement;

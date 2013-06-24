@@ -82,7 +82,7 @@
 }
 .blocklyText {
   cursor: default;
-  font-family: Lucida Calligraphy; 
+  font-family: complex; 
   font-size: 11pt;
   fill: #fff;
 }
@@ -185,18 +185,18 @@
   fill: #fff;
 }
 .blocklyToolboxOptions>.blocklyMenuDiv {
-  fill: #ddd;
-   fill-opacity: 0.3;
+  fill: #CAE1FF;
+  opacity: 0.5;
 }
 .blocklyToolboxOptions>.blocklyMenuDiv:hover {
-  fill: #e4e4e4;
+  fill: #BCD2EE;
 }
 .blocklyContextMenuOptions>.blocklyMenuDiv:hover>rect,
 .blocklyDropdownMenuOptions>.blocklyMenuDiv:hover>rect {
-  fill: #57e;
+  fill: #BCD2EE;
 }
 .blocklyMenuSelected>rect {
-  fill: #57e;
+  fill: #BCD2EE;
 }
 .blocklyMenuText {
   cursor: default !important;
@@ -209,17 +209,17 @@
   fill: #fff;
 }
 .blocklyMenuSelected>.blocklyMenuText {
-  fill: #fff;
+  fill: #000;
 }
 .blocklyMenuDivDisabled>.blocklyMenuText {
-  fill: #ccc;
+  fill: #000;
 }
 .blocklyToolboxBackground {
-  fill: #ddd;
-   fill-opacity: 0.3;
+  fill: #CAE1FF;
+   fill-opacity: 0.4;
 }
 .blocklyFlyoutBackground {
-  fill: #0cc;
+  fill: #F8F8FF;
   fill-opacity: 0.8;
 }
 .blocklyColourBackground {

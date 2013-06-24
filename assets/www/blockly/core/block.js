@@ -323,7 +323,7 @@ Blockly.Block.prototype.moveBy = function(dx, dy) {
   var xy = this.getRelativeToSurfaceXY();
   this.svg_.getRootElement().setAttribute('transform',
      // 'translate(' + (xy.x + dx) + ', ' + (xy.y + dy) + ')');
-	 'translate(' + (xy.x +13) + ', ' + (xy.y + dy) + ')');             //solves the scrollbar shifting problem
+	 'translate(' + (xy.x +15) + ', ' + (xy.y + dy) + ')');             //solves the scrollbar shifting problem
   this.moveConnections_(dx, dy);
 };
 

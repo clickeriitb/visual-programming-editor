@@ -16,6 +16,9 @@ public class CompilerActivity extends Activity {
 	ProgressBar horizontalBar;
 	ProgressBar circularBar;
 
+	TextView compilerMessages;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -34,8 +37,7 @@ public class CompilerActivity extends Activity {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				
-				
+					
 				
 				try {
 					c.preProcess();
@@ -46,7 +48,7 @@ public class CompilerActivity extends Activity {
 				}
 				
 				
-			}
+			}String message ="";
 		});
 		
 		
@@ -99,6 +101,11 @@ public class CompilerActivity extends Activity {
 		circularBar.setVisibility(View.GONE);
 	}
 	
-	
+	public void setCompilerMessage(String message)
+	{
+		
+		compilerMessages = (TextView)findViewById(R.id.compile_message);		
+		compilerMessages.setText(message);			
+	}	
 
 }

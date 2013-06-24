@@ -643,9 +643,11 @@ Blockly.ScrollbarSvg.prototype.resize = function(opt_metrics) {
         isNaN(this.ratio_)) {
       this.ratio_ = 0;
     }
+	
     var innerLength = hostMetrics.viewWidth * this.ratio_;
     var innerOffset = (hostMetrics.viewLeft - hostMetrics.contentLeft) *
         this.ratio_;
+		innerLength = 450;
     this.svgKnob_.setAttribute('width', Math.max(0, innerLength));
     this.xCoordinate = hostMetrics.absoluteLeft;
     if (this.pair_ && Blockly.RTL) {
@@ -675,6 +677,7 @@ Blockly.ScrollbarSvg.prototype.resize = function(opt_metrics) {
     var innerLength = hostMetrics.viewHeight * this.ratio_;
     var innerOffset = (hostMetrics.viewTop - hostMetrics.contentTop) *
         this.ratio_;
+		innerLength = 150;
     this.svgKnob_.setAttribute('height', Math.max(0, innerLength));
     this.xCoordinate = hostMetrics.absoluteLeft;
     if (!Blockly.RTL) {

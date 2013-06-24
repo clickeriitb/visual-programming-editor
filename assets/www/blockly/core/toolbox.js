@@ -94,7 +94,7 @@ Blockly.Toolbox.getMetrics = function() {
     contentHeight: optionBox.height + optionBox.y,
     viewTop: -Blockly.Toolbox.svgOptions_.scrollY,
     contentTop: 0,
-    absoluteTop: 0,
+    absoluteTop: 20,
     // absoluteLeft should be 0, but Firefox leaks by a pixel.
     absoluteLeft: Blockly.RTL ? -1 : 1
   };

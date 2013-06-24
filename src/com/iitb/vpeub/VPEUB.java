@@ -20,7 +20,6 @@
 package com.iitb.vpeub;
 
 import org.apache.cordova.DroidGap;
-
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -61,7 +60,8 @@ public class VPEUB extends DroidGap
 
 		Intent intent = new Intent(this,EditorActivity.class);	
 		startActivity(intent); 
-	}
+	} 
+	
 
 }
 

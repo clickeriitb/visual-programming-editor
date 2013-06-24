@@ -46,7 +46,7 @@ alert(x.value);
     
 	// variable x stores the arduino code in textarea_arduino and then writes it to the file specified in the path variable.
 	var x= document.getElementById('textarea_arduino');
-	alert(x.value);
+	//alert(x.value);
         writer.write(x.value);
 	//alert("File created successfully");
     }
@@ -66,6 +66,7 @@ alert(x.value);
 	window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail);
         window.MainActivity.customFunctionCalled();
     }
+
 </script>
   
   
@@ -98,7 +99,7 @@ alert(x.value);
   
 /**
  * List of tab names.
- * @private
+ * @private     
  */
 var TABS_ = ['blocks', 'arduino', 'xml'];
 
@@ -144,7 +145,7 @@ function tabClick(id) {
   content.style.display = 'block';
   renderContent();
 }
-
+ 
 /**
  * Populate the currently selected pane with content generated from the blocks.
  */
@@ -350,7 +351,7 @@ function init(blockly) {
 			  
               <button  style="background-image:url('./save.png')" onclick="save()" title="Save XML code"></button>
 			  <td class="tabmax">
-			  <button  style="background-image:url('./keyboard.png')" onclick="save()" title="Want Keyboard!!!!!"></button>
+			  <button  style="background-image:url('./keyboard.png')" onclick=save() title="Want Keyboard!!!!!"></button>
 			  <td class="tabmax">
               <!--<button  style="background-image:url('./load.png')" title="Load XML"id="fakeload"></button>
               <input type="file" id="load" style="display: none;"/>-->

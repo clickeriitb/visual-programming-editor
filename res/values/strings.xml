@@ -41,7 +41,29 @@
     <string name="compile_step5">Extracting EEPROM Data</string>
     <string name="compile_step6">Generating Hex File</string>
     <string name="compile_step7">Compilation Complete   :)  :)</string>
+    
+    <string name="compile_error">Sorry compilation errors encountered</string>
+    
     <string name="compile_step4_2">Archieving Core Files</string>
     <string name="title_activity_editor">EditorActivity</string>
+
+    <!-- <string name="app_name">File dialog</string> -->
+    <string name="location">Location</string>
+    <string name="cant_read_folder">folder can\'t be read!</string>
+    <string name="nnew">New</string>
+    <string name="select">Select</string>
+    <string name="file_name">File name:</string>
+    <string name="cancel">Cancel</string>
+    <string name="create">Save</string>
+    <string name="no_data">No Data</string>
+
+    <color name="gray">#ffff0000</color>
+
+    <string name="err">Error</string>
+    <string name="Menu">Menu </string>
+    <string name="save">Save</string>
+    <string name="create_new_file">Create New File</string>
+    <string name="load_arduino_content">Load Arduino Code</string>
+    
 
 </resources>
