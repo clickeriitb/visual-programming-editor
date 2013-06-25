@@ -35,20 +35,20 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	private ViewGroup mTrack;
 	private OnActionItemClickListener mItemClickListener;
 	private OnDismissListener mDismissListener;
-	
+
 	private List<ActionItem> mActionItemList = new ArrayList<ActionItem>();
-	
+
 	private boolean mDidAction;
 	private boolean mAnimateTrack;
-	
+
 	private int mChildPos;    
-    private int mAnimStyle;
-    
+	private int mAnimStyle;
+
 	public static final int ANIM_GROW_FROM_LEFT = 1;
 	public static final int ANIM_GROW_FROM_RIGHT = 2;
 	public static final int ANIM_GROW_FROM_CENTER = 3;
 	public static final int ANIM_AUTO = 4;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -56,39 +56,39 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 */
 	public QuickAction(Context context) {
 		super(context);
-		
+
 		inflater 	= (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 		mTrackAnim 	= AnimationUtils.loadAnimation(context, R.anim.rail);
-		
+
 		mTrackAnim.setInterpolator(new Interpolator() {
 			public float getInterpolation(float t) {
-	              // Pushes past the target area, then snaps back into place.
-	                // Equation for graphing: 1.2-((x*1.6)-1.1)^2
+				// Pushes past the target area, then snaps back into place.
+				// Equation for graphing: 1.2-((x*1.6)-1.1)^2
 				final float inner = (t * 1.55f) - 1.1f;
-				
-	            return 1.2f - inner * inner;
-	        }
+
+				return 1.2f - inner * inner;
+			}
 		});
-	        
+
 		setRootViewId(R.layout.quickaction);
-		
+
 		mAnimStyle		= ANIM_AUTO;
 		mAnimateTrack	= true;
 		mChildPos		= 0;
 	}
-	
+
 	/**
-     * Get action item at an index
-     * 
-     * @param index  Index of item (position from callback)
-     * 
-     * @return  Action Item at the position
-     */
-    public ActionItem getActionItem(int index) {
-        return mActionItemList.get(index);
-    }
-    
+	 * Get action item at an index
+	 * 
+	 * @param index  Index of item (position from callback)
+	 * 
+	 * @return  Action Item at the position
+	 */
+	public ActionItem getActionItem(int index) {
+		return mActionItemList.get(index);
+	}
+
 	/**
 	 * Set root view.
 	 * 
@@ -105,10 +105,10 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		//when tapping fastly on a view to show quickaction dialog.
 		//Thanx to zammbi (github.com/zammbi)
 		mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
-		
+
 		setContentView(mRootView);
 	}
-	
+
 	/**
 	 * Animate track.
 	 * 
@@ -117,7 +117,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public void mAnimateTrack(boolean mAnimateTrack) {
 		this.mAnimateTrack = mAnimateTrack;
 	}
-	
+
 	/**
 	 * Set animation style.
 	 * 
@@ -134,64 +134,64 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 */
 	public void addActionItem(ActionItem action) {
 		mActionItemList.add(action);
-		
+
 		String title 	= action.getTitle();
 		Drawable icon 	= action.getIcon();
-		
+
 		View container	= (View) inflater.inflate(R.layout.action_item, null);
-		
+
 		ImageView img 	= (ImageView) container.findViewById(R.id.iv_icon);
 		TextView text 	= (TextView) container.findViewById(R.id.tv_title);
-		
+
 		if (icon != null) { 
 			img.setImageDrawable(icon);
 		} else {
 			img.setVisibility(View.GONE);
 		}
-		
+
 		if (title != null) {
 			text.setText(title);
 		} else {
 			text.setVisibility(View.GONE);
 		}
-		
+
 		final int pos 		=  mChildPos;
 		final int actionId 	= action.getActionId();
-		
+
 		container.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (mItemClickListener != null) {
-                    mItemClickListener.onItemClick(QuickAction.this, pos, actionId);
-                }
-				
-                if (!getActionItem(pos).isSticky()) {  
-                	mDidAction = true;
-                	
-                	//workaround for transparent background bug
-                	//thx to Roman Wozniak <roman.wozniak@gmail.com>
-                	v.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            dismiss();
-                        }
-                    });
-                }
+					mItemClickListener.onItemClick(QuickAction.this, pos, actionId);
+				}
+
+				if (!getActionItem(pos).isSticky()) {  
+					mDidAction = true;
+
+					//workaround for transparent background bug
+					//thx to Roman Wozniak <roman.wozniak@gmail.com>
+					v.post(new Runnable() {
+						@Override
+						public void run() {
+							dismiss();
+						}
+					});
+				}
 			}
 		});
-		
+
 		container.setFocusable(true);
 		container.setClickable(true);
-			 
+
 		mTrack.addView(container, mChildPos+1);
-		
+
 		mChildPos++;
 	}
-	
+
 	public void setOnActionItemClickListener(OnActionItemClickListener listener) {
 		mItemClickListener = listener;
 	}
-	
+
 	/**
 	 * Show popup mWindow
 	 */
@@ -199,17 +199,17 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		preShow();
 
 		int[] location 		= new int[2];
-		
+
 		mDidAction 			= false;
-		
+
 		anchor.getLocationOnScreen(location);
 
 		Rect anchorRect 	= new Rect(location[0], location[1], location[0] + anchor.getWidth(), location[1] 
-		                	+ anchor.getHeight());
+				+ anchor.getHeight());
 
 		//mRootView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 		mRootView.measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		
+
 		int rootWidth 		= mRootView.getMeasuredWidth();
 		int rootHeight 		= mRootView.getMeasuredHeight();
 
@@ -220,7 +220,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		int yPos	 		= anchorRect.top - rootHeight;
 
 		boolean onTop		= true;
-		
+
 		// display on bottom
 		if (rootHeight > anchor.getTop()) {
 			yPos 	= anchorRect.bottom;
@@ -228,11 +228,11 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		}
 
 		showArrow(((onTop) ? R.id.arrow_down : R.id.arrow_up), anchorRect.centerX());
-		
+
 		setAnimationStyle(screenWidth, anchorRect.centerX(), onTop);
-	
+
 		mWindow.showAtLocation(anchor, Gravity.NO_GRAVITY, xPos, yPos);
-		
+
 		if (mAnimateTrack) mTrack.startAnimation(mTrackAnim);
 	}
 
@@ -250,15 +250,15 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 		case ANIM_GROW_FROM_LEFT:
 			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
 			break;
-					
+
 		case ANIM_GROW_FROM_RIGHT:
 			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Right : R.style.Animations_PopDownMenu_Right);
 			break;
-					
+
 		case ANIM_GROW_FROM_CENTER:
 			mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Center : R.style.Animations_PopDownMenu_Center);
-		break;
-					
+			break;
+
 		case ANIM_AUTO:
 			if (arrowPos <= screenWidth/4) {
 				mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopUpMenu_Left : R.style.Animations_PopDownMenu_Left);
@@ -267,11 +267,11 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 			} else {
 				mWindow.setAnimationStyle((onTop) ? R.style.Animations_PopDownMenu_Right : R.style.Animations_PopDownMenu_Right);
 			}
-					
+
 			break;
 		}
 	}
-	
+
 	/**
 	 * Show arrow
 	 * 
@@ -279,37 +279,37 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	 * @param requestedX distance from left screen
 	 */
 	private void showArrow(int whichArrow, int requestedX) {
-        final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp : mArrowDown;
-        final View hideArrow = (whichArrow == R.id.arrow_up) ? mArrowDown : mArrowUp;
+		final View showArrow = (whichArrow == R.id.arrow_up) ? mArrowUp : mArrowDown;
+		final View hideArrow = (whichArrow == R.id.arrow_up) ? mArrowDown : mArrowUp;
 
-        final int arrowWidth = mArrowUp.getMeasuredWidth();
+		final int arrowWidth = mArrowUp.getMeasuredWidth();
 
-        showArrow.setVisibility(View.VISIBLE);
-        
-        ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams)showArrow.getLayoutParams();
-        
-        param.leftMargin = requestedX - arrowWidth / 2;
-      
-        hideArrow.setVisibility(View.INVISIBLE);
-    }
-	
+		showArrow.setVisibility(View.VISIBLE);
+
+		ViewGroup.MarginLayoutParams param = (ViewGroup.MarginLayoutParams)showArrow.getLayoutParams();
+
+		param.leftMargin = requestedX - arrowWidth / 2;
+
+		hideArrow.setVisibility(View.INVISIBLE);
+	}
+
 	/**
 	 * Set listener for window dismissed. This listener will only be fired if the quicakction dialog is dismissed
 	 * by clicking outside the dialog or clicking on sticky item.
 	 */
 	public void setOnDismissListener(QuickAction.OnDismissListener listener) {
 		setOnDismissListener(this);
-		
+
 		mDismissListener = listener;
 	}
-	
+
 	@Override
 	public void onDismiss() {
 		if (!mDidAction && mDismissListener != null) {
 			mDismissListener.onDismiss();
 		}
 	}
-	
+
 	/**
 	 * Listener for item click
 	 *
@@ -317,7 +317,7 @@ public class QuickAction extends PopupWindows implements OnDismissListener {
 	public interface OnActionItemClickListener {
 		public abstract void onItemClick(QuickAction source, int pos, int actionId);
 	}
-	
+
 	/**
 	 * Listener for window dismiss
 	 * 

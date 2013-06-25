@@ -27,11 +27,12 @@ import android.util.Log;
 
 public class VPEUB extends DroidGap
 {
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		super.setIntegerProperty("loadUrlTimeoutValue", 60000);
+		//super.setIntegerProperty("loadUrlTimeoutValue", 60000);
 
 
 		super.init(); 
@@ -44,13 +45,13 @@ public class VPEUB extends DroidGap
 		super. loadUrl("file:///android_asset/www/blockly/apps/blocklyduino/main.html");
 
 	}
-	
-	
+
+
 	@Override
 	public void onConfigurationChanged(Configuration newConfig) {
 		//super.onConfigurationChanged(newConfig);
 	}
-	
+
 
 	/*
 	 * Function to start the Editor Activity
@@ -58,10 +59,9 @@ public class VPEUB extends DroidGap
 	public void customFunctionCalled() {
 		Log.e("Custom Function Called", "Custom Function Called");
 
-		Intent intent = new Intent(this,EditorActivity.class);	
-		startActivity(intent); 
+		Intent intent_editor_activity = new Intent(this,EditorActivity.class);	
+		startActivity(intent_editor_activity); 
 	} 
-	
 
 }
 

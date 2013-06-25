@@ -80,7 +80,7 @@ public class PdePreprocessor {
 	String buildPath;
 	// starts as sketch name, ends as main class name
 	String name;
-	
+
 	Activity activity;
 	File buildFolder;
 
@@ -94,9 +94,9 @@ public class PdePreprocessor {
 		indent = new String(indentChars);
 		activity = act;
 		buildFolder =new File(activity.getFilesDir(),activity.getString(R.string.build_folder));
-		
+
 		buildPath = buildFolder.getAbsolutePath();
-		
+
 	}
 
 	/**

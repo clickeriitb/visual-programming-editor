@@ -24,7 +24,7 @@ public class PopupWindows {
 	protected View mRootView;
 	protected Drawable mBackground = null;
 	protected WindowManager mWindowManager;
-	
+
 	/**
 	 * Constructor.
 	 * 
@@ -39,23 +39,23 @@ public class PopupWindows {
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_OUTSIDE) {
 					mWindow.dismiss();
-					
+
 					return true;
 				}
-				
+
 				return false;
 			}
 		});
 
 		mWindowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 	}
-	
+
 	/**
 	 * On dismiss
 	 */
 	protected void onDismiss() {		
 	}
-	
+
 	/**
 	 * On show
 	 */
@@ -68,7 +68,7 @@ public class PopupWindows {
 	protected void preShow() {
 		if (mRootView == null) 
 			throw new IllegalStateException("setContentView was not called with a view to display.");
-	
+
 		onShow();
 
 		if (mBackground == null) 
@@ -101,7 +101,7 @@ public class PopupWindows {
 	 */
 	public void setContentView(View root) {
 		mRootView = root;
-		
+
 		mWindow.setContentView(root);
 	}
 
@@ -112,7 +112,7 @@ public class PopupWindows {
 	 */
 	public void setContentView(int layoutResID) {
 		LayoutInflater inflator = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		
+
 		setContentView(inflator.inflate(layoutResID, null));
 	}
 

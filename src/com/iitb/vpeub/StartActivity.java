@@ -22,7 +22,7 @@ import com.iitb.vpeconfig.Target;
  */
 public class StartActivity extends Activity implements OnClickListener  {
 
-	
+
 	String TAG = "StartActivity";
 	TextView statusView;
 	TextView msgView;
@@ -39,29 +39,29 @@ public class StartActivity extends Activity implements OnClickListener  {
 		Log.d(TAG,"speed = " + x.getSpeed() ); 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start);
-		
+
 		statusView = (TextView)findViewById(R.id.statusText);
 		msgView = (TextView)findViewById(R.id.welomeText);
 		circleLoad = (ProgressBar)findViewById(R.id.progressCircle);
 		progressBar = (ProgressBar)findViewById(R.id.progressBar);
 		nextButton = (Button)findViewById(R.id.button1);
-		
+
 		nextButton.setOnClickListener(this);
-		
+
 		/*
 		 * Create a decompressor object in a new thread so that UI does not block
 		 */
 		final Decompressor d = new Decompressor(this);
 		new Thread((new Runnable() {
-			
+
 			@Override
 			public void run() {
 				d.doYourJob();
-				
+
 			}
 		})).start();
-		
-		
+
+
 
 
 
@@ -73,25 +73,25 @@ public class StartActivity extends Activity implements OnClickListener  {
 		getMenuInflater().inflate(R.menu.start, menu);
 		return true;
 	}
-	
+
 	/*
 	 * Compressed files are copied, now copy busybox file
 	 */
 	public void filesCopied() {
 		statusView.setText(R.string.copy_busybox);
 	}
-	
+
 	/*
 	 * Busybox is copied, now display progressbar for decompression
 	 */
 	public void busyboxCopied() {
-		
+
 		statusView.setText(R.string.unzip);
 		circleLoad.setVisibility(View.GONE);
 		progressBar.setVisibility(View.VISIBLE);
-		
+
 	}
-	
+
 	/*
 	 * Everything is set up
 	 */
@@ -101,7 +101,7 @@ public class StartActivity extends Activity implements OnClickListener  {
 		msgView.setText(R.string.env_ready);
 		statusView.setText(R.string.have_fun);
 	}
-	
+
 	/*
 	 * Set progress bar
 	 */
@@ -121,7 +121,7 @@ public class StartActivity extends Activity implements OnClickListener  {
 			startActivity(intent);
 
 		}
-		
+
 	}
 
 

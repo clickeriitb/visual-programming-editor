@@ -10,7 +10,7 @@ import android.widget.TextView;
 public class NewQAAdapter extends BaseAdapter {
 	private LayoutInflater mInflater;
 	private String[] data;
-	
+
 	public NewQAAdapter(Context context) { 
 		mInflater = LayoutInflater.from(context);
 	}
@@ -18,7 +18,7 @@ public class NewQAAdapter extends BaseAdapter {
 	public void setData(String[] data) {
 		this.data = data;
 	}
-	
+
 	@Override
 	public int getCount() {
 		return data.length;
@@ -37,21 +37,21 @@ public class NewQAAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-		
+
 		if (convertView == null) {
 			convertView	= mInflater.inflate(R.layout.list, null);
-			
+
 			holder 		= new ViewHolder();
-			
+
 			holder.mTitleText	= (TextView) convertView.findViewById(R.id.t_name);
-			
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
 		holder.mTitleText.setText(data[position]);
-		
+
 		return convertView;
 	}
 

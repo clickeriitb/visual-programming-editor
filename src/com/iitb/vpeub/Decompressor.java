@@ -65,7 +65,7 @@ public class Decompressor {
 			e.printStackTrace();
 		}
 	}
-	
+
 	/*
 	 * Copy Files from raw folder to phone, to be executed
 	 * 
@@ -76,7 +76,7 @@ public class Decompressor {
 	 * See : http://www.busybox.net/
 	 */
 	public void copyFiles() {
-		
+
 		//Check for and copy compressed file
 		File f = new File(fileDir,compFileName);
 		Log.d(TAG,"Starting to Copy");
@@ -88,7 +88,7 @@ public class Decompressor {
 		else {
 			Log.d(TAG,"Compressed File present, not Copying");
 		}
-		
+
 		//Cause other threads cant update UI
 		activity.runOnUiThread(new Runnable() {
 
@@ -121,7 +121,7 @@ public class Decompressor {
 
 
 	}
-	
+
 	/*
 	 * Invoke Busybox to decompress
 	 * LZMA seems to provide best compression
@@ -132,26 +132,26 @@ public class Decompressor {
 		String fileDir = activity.getFilesDir().getAbsolutePath();
 		if( ! outFile.exists() ) {
 			Log.d(TAG,"Starting");
-			
+
 			// See tar documentation
 			String command = fileDir + sep + busyboxFileName + " tar -C " + fileDir + " -xvf " + fileDir + sep + compFileName;
 			Log.d(TAG,"Command = " + command);
-			
+
 			//Create new process to invoke "busybox tar"
 			Process process = Runtime.getRuntime().exec(command);
-			
+
 			InputStream is = process.getInputStream();
 
 			BufferedReader br=new BufferedReader(new InputStreamReader(is));
 			String line =null;
 			File file;
 			int bytes = 0;
-			
+
 			//tar spews out file names, compute total uncompressed size from them
 			// to update the progress bar
 			while((line=br.readLine())!=null)
 			{	
-				
+
 				file = new File(fileDir,line);
 				bytes += file.length();
 				final int b = bytes;
@@ -172,7 +172,7 @@ public class Decompressor {
 		else {
 			Log.d(TAG,"Folder present, unzip skipped");
 		}
-		
+
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
@@ -183,7 +183,7 @@ public class Decompressor {
 		});
 
 	}
-	
+
 	/*
 	 * Copy files by their id in raw folder to the files directory
 	 */

@@ -17,58 +17,58 @@ public class ActionItem {
 	private Bitmap thumb;
 	private String title;
 	private int actionId = -1;
-    private boolean selected;
-    private boolean sticky;
-	
-    /**
-     * Constructor
-     * 
-     * @param actionId  Action id for case statements
-     * @param title     Title
-     * @param icon      Icon to use
-     */
-    public ActionItem(int actionId, String title, Drawable icon) {
-        this.title = title;
-        this.icon = icon;
-        this.actionId = actionId;
-    }
-    
-    /**
-     * Constructor
-     */
-    public ActionItem() {
-        this(-1, null, null);
-    }
-    
-    /**
-     * Constructor
-     * 
-     * @param actionId  Action id of the item
-     * @param title     Text to show for the item
-     */
-    public ActionItem(int actionId, String title) {
-        this(actionId, title, null);
-    }
-    
-    /**
-     * Constructor
-     * 
-     * @param icon {@link Drawable} action icon
-     */
-    public ActionItem(Drawable icon) {
-        this(-1, null, icon);
-    }
-    
-    /**
-     * Constructor
-     * 
-     * @param actionId  Action ID of item
-     * @param icon      {@link Drawable} action icon
-     */
-    public ActionItem(int actionId, Drawable icon) {
-        this(actionId, null, icon);
-    }
-	
+	private boolean selected;
+	private boolean sticky;
+
+	/**
+	 * Constructor
+	 * 
+	 * @param actionId  Action id for case statements
+	 * @param title     Title
+	 * @param icon      Icon to use
+	 */
+	public ActionItem(int actionId, String title, Drawable icon) {
+		this.title = title;
+		this.icon = icon;
+		this.actionId = actionId;
+	}
+
+	/**
+	 * Constructor
+	 */
+	public ActionItem() {
+		this(-1, null, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param actionId  Action id of the item
+	 * @param title     Text to show for the item
+	 */
+	public ActionItem(int actionId, String title) {
+		this(actionId, title, null);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param icon {@link Drawable} action icon
+	 */
+	public ActionItem(Drawable icon) {
+		this(-1, null, icon);
+	}
+
+	/**
+	 * Constructor
+	 * 
+	 * @param actionId  Action ID of item
+	 * @param icon      {@link Drawable} action icon
+	 */
+	public ActionItem(int actionId, Drawable icon) {
+		this(actionId, null, icon);
+	}
+
 	/**
 	 * Set action title
 	 * 
@@ -77,7 +77,7 @@ public class ActionItem {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+
 	/**
 	 * Get action title
 	 * 
@@ -86,7 +86,7 @@ public class ActionItem {
 	public String getTitle() {
 		return this.title;
 	}
-	
+
 	/**
 	 * Set action icon
 	 * 
@@ -95,7 +95,7 @@ public class ActionItem {
 	public void setIcon(Drawable icon) {
 		this.icon = icon;
 	}
-	
+
 	/**
 	 * Get action icon
 	 * @return  {@link Drawable} action icon
@@ -103,39 +103,39 @@ public class ActionItem {
 	public Drawable getIcon() {
 		return this.icon;
 	}
-	
-	 /**
-     * Set action id
-     * 
-     * @param actionId  Action id for this action
-     */
-    public void setActionId(int actionId) {
-        this.actionId = actionId;
-    }
-    
-    /**
-     * @return  Our action id
-     */
-    public int getActionId() {
-        return actionId;
-    }
-    
-    /**
-     * Set sticky status of button
-     * 
-     * @param sticky  true for sticky, pop up sends event but does not disappear
-     */
-    public void setSticky(boolean sticky) {
-        this.sticky = sticky;
-    }
-    
-    /**
-     * @return  true if button is sticky, menu stays visible after press
-     */
-    public boolean isSticky() {
-        return sticky;
-    }
-    
+
+	/**
+	 * Set action id
+	 * 
+	 * @param actionId  Action id for this action
+	 */
+	public void setActionId(int actionId) {
+		this.actionId = actionId;
+	}
+
+	/**
+	 * @return  Our action id
+	 */
+	public int getActionId() {
+		return actionId;
+	}
+
+	/**
+	 * Set sticky status of button
+	 * 
+	 * @param sticky  true for sticky, pop up sends event but does not disappear
+	 */
+	public void setSticky(boolean sticky) {
+		this.sticky = sticky;
+	}
+
+	/**
+	 * @return  true if button is sticky, menu stays visible after press
+	 */
+	public boolean isSticky() {
+		return sticky;
+	}
+
 	/**
 	 * Set selected flag;
 	 * 
@@ -144,7 +144,7 @@ public class ActionItem {
 	public void setSelected(boolean selected) {
 		this.selected = selected;
 	}
-	
+
 	/**
 	 * Check if item is selected
 	 * 
@@ -162,7 +162,7 @@ public class ActionItem {
 	public void setThumb(Bitmap thumb) {
 		this.thumb = thumb;
 	}
-	
+
 	/**
 	 * Get thumb image
 	 * 

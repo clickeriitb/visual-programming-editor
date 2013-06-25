@@ -24,7 +24,7 @@ import com.iitb.vpeconfig.Target;
  * to be uploaded to the board
  */
 public class Compiler {
-	
+
 	String message ="";
 
 	//Directory where code is placed (ino)
@@ -441,20 +441,20 @@ public class Compiler {
 			@Override
 			public void run() {
 				activity.changeProgress(100);
-				
+
 				File f2 = new File(buildPath + File.separator + "final.hex");
 				if(f2.exists())
-						{
-				activity.setMessage(R.string.compile_step7);
-				activity.removeCirularBar();
-						}
+				{
+					activity.setMessage(R.string.compile_step7);
+					activity.removeCirularBar();
+				}
 				else
 				{
-					
+
 					activity.setMessage(R.string.compile_error);
 					activity.removeCirularBar();
 				}
-				
+
 			}
 		});
 
@@ -745,41 +745,41 @@ public class Compiler {
 			InputStream is = process.getErrorStream();
 			BufferedReader br=new BufferedReader(new InputStreamReader(is));
 			String line = br.readLine();
-					
-			
+
+
 			while(line!=null)
 			{
 				String comm = (String)commandList.get(0);
 				String pname = comm.substring(comm.lastIndexOf(File.separator));
 				Log.d("Error Message",pname + " - "+line);
 				line = br.readLine();
-				
-				
-				message = message + line + "\n";
-				
 
-				
+
+				message = message + line + "\n";
+
+
+
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			Log.d(TAG,"Failure to exec");
 		}
 
-	
-	activity.runOnUiThread(new Runnable() {
 
-		@Override
-		public void run() {
-			
-			//String message;
-			activity.setCompilerMessage(message);
-					}
-		
-	});
-}
-	
-	
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+
+				//String message;
+				activity.setCompilerMessage(message);
+			}
+
+		});
+	}
+
+
 	private void createFolder(File folder)  {
 		if (folder.isDirectory()) return;
 		if (!folder.mkdir())

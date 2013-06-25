@@ -30,154 +30,78 @@ public class EditorActivity extends Activity implements OnClickListener {
 	final Context context = this;
 
 	Button menu;
-	//Button save;
-	//Button newFile;
-
-	//Button openFile;
-
-
 	EditText text;
-
 	EditText userInput;
 
-
-
 	String s;
-
-
 	String line,line1 = "";
-	//String fileName = "";
 	String TAG="editor";
-
 	String s2;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_editor);
-		
-		
-		
-		//////////////////////////////////////////////////////
-		
 
-        final int ID_SAVE = 0;
+
+		final int ID_SAVE = 0;
 		ActionItem saveItem      = new ActionItem(ID_SAVE, "Save", getResources().getDrawable(R.drawable.ic_add));
-        final int ID_COMPILE = 1;
+		final int ID_COMPILE = 1;
 		ActionItem compileItem   = new ActionItem(ID_COMPILE, "Compile", getResources().getDrawable(R.drawable.ic_accept));
-        final int ID_LOAD = 2;
+		final int ID_LOAD = 2;
 		ActionItem loadItem   = new ActionItem(ID_LOAD, "Load Arduino Code", getResources().getDrawable(R.drawable.ic_up));
-		
-		
-		
 		final int ID_CREATEFILE = 3;
 		ActionItem createfileItem      = new ActionItem(ID_CREATEFILE, "Create new file", getResources().getDrawable(R.drawable.ic_add));
-		
 		final int ID_SHOWEXAMPLE = 4;
 		ActionItem showexampleItem      = new ActionItem(ID_SHOWEXAMPLE, "Show examples", getResources().getDrawable(R.drawable.ic_add));
-		
-		
-        //use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
-        //uploadItem.setSticky(true);
 
-        final QuickAction mQuickAction  = new QuickAction(this);
 
-        mQuickAction.addActionItem(saveItem);
-        mQuickAction.addActionItem(compileItem);
-        mQuickAction.addActionItem(loadItem);
-        
-        mQuickAction.addActionItem(createfileItem);
-        
-        mQuickAction.addActionItem(showexampleItem);
-        
-        
+		//use setSticky(true) to disable QuickAction dialog being dismissed after an item is clicked
+		//uploadItem.setSticky(true);
 
-        //setup the action item click listener
-        mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
-            @Override	
-            public void onItemClick(QuickAction quickAction, int pos, int actionId) {
-                ActionItem actionItem = quickAction.getActionItem(pos);
+		final QuickAction mQuickAction  = new QuickAction(this);
 
-                if (actionId == ID_SAVE) {
-                   //Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();
-                	
-                	saveToFile();
-                	
-                	
-                } else if(actionId == ID_COMPILE) {
-                 //   Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
-                	saveToFile();
-                	startCompile();
-                
-                }
-                
-                else if(actionId == ID_LOAD)
-                {
-                	
-                	findFileLocation();
-                }
-                
-                
-                else if(actionId == ID_CREATEFILE)
-                {
-                	
-                	setFileName();
-                }
-                
-                
-                else if(actionId == ID_SHOWEXAMPLE)
-                {
-                	
-                	show_Examples();
-                }
-                
-                
-            }
-        });
+		mQuickAction.addActionItem(saveItem);
+		mQuickAction.addActionItem(compileItem);
+		mQuickAction.addActionItem(loadItem);   
+		mQuickAction.addActionItem(createfileItem);       
+		mQuickAction.addActionItem(showexampleItem);   
 
-        mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                Toast.makeText(getApplicationContext(), "dismissed", Toast.LENGTH_SHORT).show();
-            }
-        });
+		//setup the action item click listener
+		mQuickAction.setOnActionItemClickListener(new QuickAction.OnActionItemClickListener() {
+			@Override	
+			public void onItemClick(QuickAction quickAction, int pos, int actionId) {
+				ActionItem actionItem = quickAction.getActionItem(pos);
+				if (actionId == ID_SAVE) {
+					//Toast.makeText(getApplicationContext(), "Add item selected", Toast.LENGTH_SHORT).show();   	
+					saveToFile();           	
+				} else if(actionId == ID_COMPILE) {
+					//   Toast.makeText(getApplicationContext(), actionItem.getTitle() + " selected", Toast.LENGTH_SHORT).show();
+					saveToFile();
+					startCompile();
+				}
+				else if(actionId == ID_LOAD)
+				{
+					findFileLocation();
+				}
+				else if(actionId == ID_CREATEFILE)
+				{
+					setFileName();
+				}
+				else if(actionId == ID_SHOWEXAMPLE)
+				{
+					show_Examples();
+				}
+			}
+		});
 
-//        Button btn1 = (Button) this.findViewById(R.id.btn1);
-//        btn1.setOnClickListener(new View.OnClickListener() {
-//            @QuickAction.OnActionItemClickListener()Override
-//            public void onClick(View v) {
-//                mQuickAction.show(v);
-//            }
-//        })
+		mQuickAction.setOnDismissListener(new QuickAction.OnDismissListener() {
+			@Override
+			public void onDismiss() {
+				Toast.makeText(getApplicationContext(), "dismissed", Toast.LENGTH_SHORT).show();
+			}
+		});
 
-//        Button btn2 = (Button) this.findViewById(R.id.btn2);
-//        btn2.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                mQuickAction.show(v);
-//                mQuickAction.setAnimStyle(QuickAction.ANIM_GROW_FROM_CENTER);
-//            }
-//        });
-		
-		
-		
-       
-        
-        
-		//////////////////////////////////////////////////////
-		
-		
-		
-
-//		compile = (Button)findViewById(R.id.button1);
-//		compile.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				//startCompile();
-//
-//			}
-//		});
 
 		copyText();
 		text = (EditText)findViewById(R.id.editText1);
@@ -192,28 +116,8 @@ public class EditorActivity extends Activity implements OnClickListener {
 				mQuickAction.show(v);
 			}
 		});
-
-//		newFile = (Button)findViewById(R.id.button3);
-//		newFile.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				//setFileName();
-//
-//			}
-//		});
-
-//		openFile = (Button)findViewById(R.id.button4);
-//		openFile.setOnClickListener(new View.OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				//findFileLocation();
-//			}
-//		});
-
-
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -223,6 +127,7 @@ public class EditorActivity extends Activity implements OnClickListener {
 
 	}
 
+
 	/*
 	 * Function to start the compiler Activity
 	 */
@@ -230,13 +135,12 @@ public class EditorActivity extends Activity implements OnClickListener {
 	{
 		Intent intent = new Intent(this,CompilerActivity.class);	
 		startActivity(intent);
-
 	}
+
 
 	/*
 	 * Copies the content of sketch.ino file (which has arduino code) in string line1
 	 */
-
 	public void copyText()
 	{
 		try
@@ -255,7 +159,6 @@ public class EditorActivity extends Activity implements OnClickListener {
 		{
 			e.printStackTrace();
 		}			
-
 	}
 
 
@@ -264,8 +167,6 @@ public class EditorActivity extends Activity implements OnClickListener {
 	 */
 	public void saveToFile()
 	{
-
-
 		s= text.getText().toString();
 		File file1 = new File(getFilesDir(),"code/sketch.ino");
 		try
@@ -273,7 +174,6 @@ public class EditorActivity extends Activity implements OnClickListener {
 			FileOutputStream f = new FileOutputStream(file1);
 			f.write(s.getBytes());
 			f.close();
-
 
 			Context context = getApplicationContext();
 			CharSequence text = "File Saved Successfully";
@@ -287,16 +187,14 @@ public class EditorActivity extends Activity implements OnClickListener {
 		{
 			e.printStackTrace();
 		}
-
 	}
-	
-	
-//////////////////////////////////////////////////////
-	
+
+
+	/*
+	 * Displays some of the arduino code examples.
+	 */
 	public void show_Examples()
 	{
-
-
 		Intent intent = new Intent(getBaseContext(), FileDialog.class);
 		intent.putExtra(FileDialog.START_PATH, getFilesDir()+File.separator+"examples");
 
@@ -307,25 +205,16 @@ public class EditorActivity extends Activity implements OnClickListener {
 		//intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
 
 		startActivityForResult(intent, REQUEST_SAVE);
-		
+
 		Log.d("show examples","examples showing");
-
 	}
-	
 
-///////////////////////////////////////////////////////////////
-	
-	
-	
-	
-	
-	
 
+	/*
+	 * To Create a new file and save the contents of edit text in it.
+	 */
 	public void setFileName()
 	{
-
-
-
 		// get prompts.xml view
 		LayoutInflater li = LayoutInflater.from(context);
 		View promptsView = li.inflate(R.layout.prompts, null);
@@ -349,8 +238,6 @@ public class EditorActivity extends Activity implements OnClickListener {
 				dialog.cancel();
 			}
 		});
-
-
 
 		// create alert dialog
 		AlertDialog alertDialog = alertDialogBuilder.create();
@@ -382,16 +269,14 @@ public class EditorActivity extends Activity implements OnClickListener {
 		{
 			e.printStackTrace();
 		}
-
-
 	}
 
 
-
+	/*
+	 * Loads the arduino code from a previously created file into the edit text
+	 */
 	public void findFileLocation()
 	{
-
-
 		Intent intent = new Intent(getBaseContext(), FileDialog.class);
 		intent.putExtra(FileDialog.START_PATH, getFilesDir()+File.separator+"code");
 
@@ -400,11 +285,8 @@ public class EditorActivity extends Activity implements OnClickListener {
 
 		//alternatively you can set file filter
 		//intent.putExtra(FileDialog.FORMAT_FILTER, new String[] { "png" });
-
 		startActivityForResult(intent, REQUEST_SAVE);
-
 	}
-
 
 
 	public synchronized void onActivityResult(final int requestCode,
@@ -412,53 +294,37 @@ public class EditorActivity extends Activity implements OnClickListener {
 
 		if (resultCode == Activity.RESULT_OK) {
 
-			// if (requestCode == REQUEST_SAVE) {
-			System.out.println("Saving...");
-			// } else if (requestCode == REQUEST_LOAD) {
-			System.out.println("Loading...");
+			String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
+
+			Log.e(TAG, filePath);
+
+			try
+			{   
+				line1 = "";
+				File file = new File(filePath);
+				InputStream instream = new FileInputStream(file);
+				InputStreamReader inputreader = new InputStreamReader(instream); 
+				BufferedReader buffreader = new BufferedReader(inputreader); 
+
+				while ((line = buffreader.readLine()) != null)
+					line1+=line+"\n";
+
+				buffreader.close();
+			}
+			catch (Exception e) 
+			{
+				e.printStackTrace();
+			}		
+
+			text.setText(line1);
+
+		} else if (resultCode == Activity.RESULT_CANCELED) {
+
+			Log.d("application stopped", "NO FILE SELECTED");
+
+			//finish();
+			onResume();
 		}
-
-		String filePath = data.getStringExtra(FileDialog.RESULT_PATH);
-
-		//} else if (resultCode == Activity.RESULT_CANCELED) {
-		//  Logger.getLogger(AccelerationChartRun.class.getName()).log(
-		//               Level.WARNING, "file not selected");
-
-		Log.e(TAG, filePath);
-
-
-
-
-
-
-		//s= text.getText().toString();
-		//s2 = userInput.getText().toString();
-		//File file3 = new File(filePath);
-
-
-		try
-		{   
-			line1 = "";
-			File file = new File(filePath);
-			InputStream instream = new FileInputStream(file);
-			InputStreamReader inputreader = new InputStreamReader(instream); 
-			BufferedReader buffreader = new BufferedReader(inputreader); 
-
-			while ((line = buffreader.readLine()) != null)
-				line1+=line+"\n";
-
-			buffreader.close();
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}		
-
-		text.setText(line1);
 	}
 
 }
-
-
-
-
